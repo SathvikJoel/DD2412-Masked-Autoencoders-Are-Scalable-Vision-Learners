@@ -72,7 +72,7 @@ def get_args_parser():
                         help='epochs to warmup LR')
 
     # Dataset parameters
-    parser.add_argument('--data_path', default='/datasets01/imagenet_full_size/061417/', type=str,
+    parser.add_argument('--data_path', default='../../../datasets/', type=str,
                         help='dataset path')
 
     parser.add_argument('--output_dir', default='./output_dir',
@@ -93,13 +93,14 @@ def get_args_parser():
     parser.add_argument('--no_pin_mem', action='store_false', dest='pin_mem')
     parser.set_defaults(pin_mem=True)
 
+    #We do not need to use distributed training for our project
     # distributed training parameters
-    parser.add_argument('--world_size', default=1, type=int,
-                        help='number of distributed processes')
-    parser.add_argument('--local_rank', default=-1, type=int)
-    parser.add_argument('--dist_on_itp', action='store_true')
-    parser.add_argument('--dist_url', default='env://',
-                        help='url used to set up distributed training')
+    # parser.add_argument('--world_size', default=1, type=int,
+    #                     help='number of distributed processes')
+    # parser.add_argument('--local_rank', default=-1, type=int)
+    # parser.add_argument('--dist_on_itp', action='store_true')
+    # parser.add_argument('--dist_url', default='env://',
+    #                     help='url used to set up distributed training')
 
     return parser
 
@@ -153,7 +154,7 @@ def main(args):
     )
     
     # define the model
-    model = models_mae.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
+    model = mea_model.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
 
     model.to(device)
 

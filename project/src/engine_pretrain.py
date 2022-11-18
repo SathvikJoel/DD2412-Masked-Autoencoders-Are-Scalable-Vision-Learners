@@ -13,10 +13,6 @@ import sys
 from typing import Iterable
 
 
-
-
-
-
 import torch
 
 import util.misc as misc

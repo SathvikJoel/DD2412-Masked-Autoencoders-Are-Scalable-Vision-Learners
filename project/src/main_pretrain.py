@@ -78,7 +78,7 @@ def get_args_parser():
                         help='epochs to warmup LR')
 
     # Dataset parameters
-    parser.add_argument('--data_path', default='../../../datasets/', type=str,
+    parser.add_argument('--data_path', default='../../../', type=str,
                         help='dataset path')
 
     parser.add_argument('--output_dir', default='./output_dir',
@@ -135,7 +135,7 @@ def main(args):
             transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761])])
             #For imagenet:
             #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
-    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, ''), transform=transform_train)
+    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'datasets'), transform=transform_train)
     print(dataset_train)
 
     if True:  # args.distributed:

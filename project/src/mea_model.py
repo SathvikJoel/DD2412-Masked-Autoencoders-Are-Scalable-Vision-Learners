@@ -24,7 +24,7 @@ from util.pos_embed import get_2d_sincos_pos_embed
 class MaskedAutoencoderViT(nn.Module):
     """ Masked Autoencoder with VisionTransformer backbone
     """
-    def __init__(self, img_size=224, patch_size=16, in_chans=3,
+    def __init__(self, img_size=32, patch_size=16, in_chans=3,
                  embed_dim=1024, depth=24, num_heads=16,
                  decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
                  mlp_ratio=4., norm_layer=nn.LayerNorm, norm_pix_loss=False):
@@ -221,11 +221,25 @@ class MaskedAutoencoderViT(nn.Module):
         loss = self.forward_loss(imgs, pred, mask)
         return loss, pred, mask
 
+#decoder emded_dim for cifar_100:
+#embed_dim for cifar-100: 768
+#depth for cifar-100: 12
+#patch_size for cifar-100: 16
+#num_heads for cifar-100: 12
+#decoder_num_heads for cifar-100: 12
+#mlp_ratio for cifar-100: 4
+#decoder_depth for cifar-100: 6
+#qkv_bias for cifar-100: True
+#norm_layer for cifar-100: nn.LayerNorm
+#drop_rate for cifar-100: 0.0
+#attn_drop_rate for cifar-100: 0.0
+#drop_path_rate for cifar-100: 0.1
+#norm_layer for cifar-100: nn.LayerNorm
 
 def mae_vit_base_patch16_dec512d8b(**kwargs):
     model = MaskedAutoencoderViT(
-        patch_size=4, embed_dim=192, depth=8, num_heads=8,
-        decoder_embed_dim=128, decoder_depth=8, decoder_num_heads=12,
+        patch_size=2, embed_dim=768, depth=12, num_heads=12,
+        decoder_embed_dim=512, decoder_depth=6, decoder_num_heads=12,
         mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return model
 

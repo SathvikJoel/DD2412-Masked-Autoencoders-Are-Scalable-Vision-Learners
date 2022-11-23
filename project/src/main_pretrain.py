@@ -135,7 +135,7 @@ def main(args):
             transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761])])
             #For imagenet:
             #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
-    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
+    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, ''), transform=transform_train)
     print(dataset_train)
 
     if True:  # args.distributed:

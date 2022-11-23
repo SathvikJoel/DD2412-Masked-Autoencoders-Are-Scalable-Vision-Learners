@@ -222,11 +222,21 @@ class MaskedAutoencoderViT(nn.Module):
         return loss, pred, mask
 
 #decoder emded_dim for cifar_100:
-
+#embed_dim for cifar-100: 768
+#depth for cifar-100: 12
+#patch_size for cifar-100: 16
+#num_heads for cifar-100: 12
+#mlp_ratio for cifar-100: 4
+#qkv_bias for cifar-100: True
+#norm_layer for cifar-100: nn.LayerNorm
+#drop_rate for cifar-100: 0.0
+#attn_drop_rate for cifar-100: 0.0
+#drop_path_rate for cifar-100: 0.1
+#norm_layer for cifar-100: nn.LayerNorm
 
 def mae_vit_base_patch16_dec512d8b(**kwargs):
     model = MaskedAutoencoderViT(
-        patch_size=4, embed_dim=192, depth=8, num_heads=8,
+        patch_size=2, embed_dim=192, depth=8, num_heads=8,
         decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=12,
         mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return model

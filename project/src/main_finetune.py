@@ -34,7 +34,7 @@ from util.datasets import build_dataset
 from util.pos_embed import interpolate_pos_embed
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
 
-import models_vit
+# import models_vit
 
 from engine_finetune import train_one_epoch, evaluate
 
@@ -51,8 +51,13 @@ def get_args_parser():
     parser.add_argument('--model', default='vit_large_patch16', type=str, metavar='MODEL',
                         help='Name of model to train')
 
-    parser.add_argument('--input_size', default=224, type=int,
+    #Cifar-100 input size: 32x32
+    parser.add_argument('--input_size', default=32, type=int,
                         help='images input size')
+
+    # #Imagenet input size: 224x224
+    # parser.add_argument('--input_size', default=224, type=int,
+    #                     help='images input size')
 
     parser.add_argument('--drop_path', type=float, default=0.1, metavar='PCT',
                         help='Drop path rate (default: 0.1)')
@@ -117,8 +122,12 @@ def get_args_parser():
                         help='Use class token instead of global pool for classification')
 
     # Dataset parameters
-    parser.add_argument('--data_path', default='/datasets01/imagenet_full_size/061417/', type=str,
+    #Cifar-100 path
+    parser.add_argument('--data_path', default='../../../datasets/', type=str,
                         help='dataset path')
+    #Imagenet path
+    # parser.add_argument('--data_path', default='/datasets01/imagenet_full_size/061417/', type=str,
+    #                     help='dataset path')
     parser.add_argument('--nb_classes', default=1000, type=int,
                         help='number of the classification types')
 
@@ -145,12 +154,12 @@ def get_args_parser():
     parser.set_defaults(pin_mem=True)
 
     # distributed training parameters
-    parser.add_argument('--world_size', default=1, type=int,
-                        help='number of distributed processes')
-    parser.add_argument('--local_rank', default=-1, type=int)
-    parser.add_argument('--dist_on_itp', action='store_true')
-    parser.add_argument('--dist_url', default='env://',
-                        help='url used to set up distributed training')
+    # parser.add_argument('--world_size', default=1, type=int,
+    #                     help='number of distributed processes')
+    # parser.add_argument('--local_rank', default=-1, type=int)
+    # parser.add_argument('--dist_on_itp', action='store_true')
+    # parser.add_argument('--dist_url', default='env://',
+    #                     help='url used to set up distributed training')
 
     return parser
 

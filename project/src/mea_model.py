@@ -221,11 +221,13 @@ class MaskedAutoencoderViT(nn.Module):
         loss = self.forward_loss(imgs, pred, mask)
         return loss, pred, mask
 
+#decoder emded_dim for cifar_100:
+
 
 def mae_vit_base_patch16_dec512d8b(**kwargs):
     model = MaskedAutoencoderViT(
         patch_size=4, embed_dim=192, depth=8, num_heads=8,
-        decoder_embed_dim=128, decoder_depth=8, decoder_num_heads=12,
+        decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=12,
         mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return model
 

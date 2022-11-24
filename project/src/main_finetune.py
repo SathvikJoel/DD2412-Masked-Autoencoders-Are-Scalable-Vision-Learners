@@ -41,7 +41,7 @@ from engine_finetune import train_one_epoch, evaluate
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MAE fine-tuning for image classification', add_help=False)
-    parser.add_argument('--batch_size', default=64, type=int,
+    parser.add_argument('--batch_size', default=32, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
     parser.add_argument('--epochs', default=50, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
@@ -154,7 +154,7 @@ def get_args_parser():
     parser.set_defaults(pin_mem=True)
 
     # distributed training parameters
-    # parser.add_argument('--world_size', default=1, type=int,
+    # parser.add_argument('--world_size', default=0, type=int,
     #                     help='number of distributed processes')
     # parser.add_argument('--local_rank', default=-1, type=int)
     # parser.add_argument('--dist_on_itp', action='store_true')

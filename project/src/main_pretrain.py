@@ -39,7 +39,7 @@ from engine_pretrain import train_one_epoch
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MAE pre-training', add_help=False)
-    parser.add_argument('--batch_size', default=64, type=int,
+    parser.add_argument('--batch_size', default=16, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
     parser.add_argument('--epochs', default=400, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
@@ -141,21 +141,21 @@ def main(args):
     dataset_train = datasets.CIFAR100(root=args.data_path, train=True, download=True, transform=transform_train)
     print(dataset_train)
 
-    if True:  # args.distributed:
-        num_tasks = misc.get_world_size()
-        global_rank = misc.get_rank()
-        sampler_train = torch.utils.data.DistributedSampler(
-            dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
-        )
-        print("Sampler_train = %s" % str(sampler_train))
-    else:
-        sampler_train = torch.utils.data.RandomSampler(dataset_train)
+    # if True:  # args.distributed:
+    #     num_tasks = misc.get_world_size()
+    #     global_rank = misc.get_rank()
+    #     sampler_train = torch.utils.data.DistributedSampler(
+    #         dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
+    #     )
+    #     print("Sampler_train = %s" % str(sampler_train))
+    # else:
+    sampler_train = torch.utils.data.RandomSampler(dataset_train)
 
-    if global_rank == 0 and args.log_dir is not None:
-        os.makedirs(args.log_dir, exist_ok=True)
-        log_writer = SummaryWriter(log_dir=args.log_dir)
-    else:
-        log_writer = None
+    # if global_rank == 0 and args.log_dir is not None:
+    #     os.makedirs(args.log_dir, exist_ok=True)
+    #     log_writer = SummaryWriter(log_dir=args.log_dir)
+    # else:
+    log_writer = None
 
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train, sampler=sampler_train,

@@ -39,7 +39,7 @@ from engine_pretrain import train_one_epoch
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MAE pre-training', add_help=False)
-    parser.add_argument('--batch_size', default=64, type=int,
+    parser.add_argument('--batch_size', default=32, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
     parser.add_argument('--epochs', default=400, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
@@ -50,7 +50,7 @@ def get_args_parser():
     parser.add_argument('--model', default='mae_vit_base_patch16', type=str, metavar='MODEL',
                         help='Name of model to train')
     #Translate size to Cifar-100: 32x32
-    parser.add_argument('--input_size', default=32, type=int,
+    parser.add_argument('--input_size', default=112, type=int,
                     help='images input size')
     #Size of image-net input: 224x224
     # parser.add_argument('--input_size', default=224, type=int,

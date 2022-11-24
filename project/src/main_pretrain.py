@@ -101,18 +101,18 @@ def get_args_parser():
 
     #We do not need to use distributed training for our project
     # distributed training parameters
-    # parser.add_argument('--world_size', default=0, type=int,
-    #                     help='number of distributed processes')
-    # parser.add_argument('--local_rank', default=-1, type=int)
-    # parser.add_argument('--dist_on_itp', action='store_true')
-    # parser.add_argument('--dist_url', default='env://',
-    #                     help='url used to set up distributed training')
+    parser.add_argument('--world_size', default=0, type=int,
+                        help='number of distributed processes')
+    parser.add_argument('--local_rank', default=-1, type=int)
+    parser.add_argument('--dist_on_itp', action='store_true')
+    parser.add_argument('--dist_url', default='env://',
+                        help='url used to set up distributed training')
 
     return parser
 
 
 def main(args):
-    # misc.init_distributed_mode(args)
+    misc.init_distributed_mode(args)
 
     print('job dir: {}'.format(os.path.dirname(os.path.realpath(__file__))))
     print("{}".format(args).replace(', ', ',\n'))
@@ -184,9 +184,9 @@ def main(args):
     print("accumulate grad iterations: %d" % args.accum_iter)
     print("effective batch size: %d" % eff_batch_size)
 
-    # if args.distributed:
-    #     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
-    #     model_without_ddp = model.module
+    if args.distributed:
+        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
+        model_without_ddp = model.module
     
     # following timm: set wd as 0 for bias and norm layers
     param_groups = optim_factory.add_weight_decay(model_without_ddp, args.weight_decay)

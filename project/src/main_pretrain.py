@@ -128,6 +128,8 @@ def main(args):
 
     # simple augmentation
     transform_train = transforms.Compose([
+            #randomresizedcrop for cifar-100:
+            
             transforms.RandomResizedCrop(args.input_size, scale=(0.2, 1.0), interpolation=3),  # 3 is bicubic
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
@@ -135,7 +137,8 @@ def main(args):
             transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761])])
             #For imagenet:
             #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
-    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'datasets'), transform=transform_train)
+    # dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
+    dataset_train = datasets.CIFAR100(root=args.data_path, train=True, download=True, transform=transform_train)
     print(dataset_train)
 
     if True:  # args.distributed:

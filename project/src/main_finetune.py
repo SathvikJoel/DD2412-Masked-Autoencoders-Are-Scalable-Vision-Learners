@@ -58,6 +58,9 @@ def get_args_parser():
     # #Imagenet input size: 224x224
     # parser.add_argument('--input_size', default=224, type=int,
     #                     help='images input size')
+    parser.add_argument('--norm_pix_loss', action='store_true',
+                        help='Use (per-patch) normalized pixels as targets for computing loss')
+    parser.set_defaults(norm_pix_loss=False)
 
     parser.add_argument('--drop_path', type=float, default=0.1, metavar='PCT',
                         help='Drop path rate (default: 0.1)')
@@ -239,7 +242,7 @@ def main(args):
     #     global_pool=args.global_pool,
     # )
     model = mea_model.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
-    
+
     if args.finetune and not args.eval:
         checkpoint = torch.load(args.finetune, map_location='cpu')
 

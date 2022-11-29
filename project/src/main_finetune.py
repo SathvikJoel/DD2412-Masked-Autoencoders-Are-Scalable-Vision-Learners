@@ -38,6 +38,8 @@ from util.misc import NativeScalerWithGradNormCount as NativeScaler
 import mea_model
 from engine_finetune import train_one_epoch, evaluate
 
+import timm.optim.optim_factory as optim_factory
+
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MAE fine-tuning for image classification', add_help=False)
@@ -293,10 +295,11 @@ def main(args):
         model_without_ddp = model.module
 
     # build optimizer with layer-wise lr decay (lrd)
-    param_groups = lrd.param_groups_lrd(model_without_ddp, args.weight_decay,
-        no_weight_decay_list=model_without_ddp.no_weight_decay(),
-        layer_decay=args.layer_decay
-    )
+    param_groups = optim_factory.add_weight_decay(model_without_ddp, args.weight_decay)
+    # param_groups = lrd.param_groups_lrd(model_without_ddp, args.weight_decay,
+        # no_weight_decay_list=model_without_ddp.no_weight_decay(),
+        # layer_decay=args.layer_decay
+    # )
     optimizer = torch.optim.AdamW(param_groups, lr=args.lr)
     loss_scaler = NativeScaler()
 

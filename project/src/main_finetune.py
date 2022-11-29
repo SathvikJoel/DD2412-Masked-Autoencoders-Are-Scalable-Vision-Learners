@@ -34,7 +34,7 @@ from util.datasets import build_dataset
 from util.pos_embed import interpolate_pos_embed
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
 
-# import models_vit
+import vit_model
 import mea_model
 from engine_finetune import train_one_epoch, evaluate
 
@@ -48,7 +48,7 @@ def get_args_parser():
                         help='Accumulate gradient iterations (for increasing the effective batch size under memory constraints)')
 
     # Model parameters
-    parser.add_argument('--model', default='mae_vit_base_patch16', type=str, metavar='MODEL',
+    parser.add_argument('--model', default='vit_base_patch16', type=str, metavar='MODEL',
                         help='Name of model to train')
 
     #Cifar-100 input size: 32x32
@@ -233,10 +233,10 @@ def main(args):
             prob=args.mixup_prob, switch_prob=args.mixup_switch_prob, mode=args.mixup_mode,
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
     
-    model = mea_model.__dict__[args.model](
-        # num_classes=args.nb_classes,
-        # drop_path_rate=args.drop_path,
-        # global_pool=args.global_pool,
+    model = vit_model.__dict__[args.model](
+        num_classes=args.nb_classes,
+        drop_path_rate=args.drop_path,
+        global_pool=args.global_pool,
     )
 
     if args.finetune and not args.eval:

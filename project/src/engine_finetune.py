@@ -54,9 +54,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         with torch.cuda.amp.autocast():
             outputs = model(samples)
-            print("outputs: ", outputs[1])
-            print("targets: ", targets)
-            loss = criterion(outputs[1], targets)
+            loss = criterion(outputs, targets)
 
         loss_value = loss.item()
 

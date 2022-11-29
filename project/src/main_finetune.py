@@ -233,12 +233,11 @@ def main(args):
             prob=args.mixup_prob, switch_prob=args.mixup_switch_prob, mode=args.mixup_mode,
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
     
-    # model = mea_model.__dict__[args.model](
-    #     num_classes=args.nb_classes,
-    #     drop_path_rate=args.drop_path,
-    #     global_pool=args.global_pool,
-    # )
-    model = mea_model.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
+    model = mea_model.__dict__[args.model](
+        # num_classes=args.nb_classes,
+        # drop_path_rate=args.drop_path,
+        # global_pool=args.global_pool,
+    )
 
     if args.finetune and not args.eval:
         checkpoint = torch.load(args.finetune, map_location='cpu')

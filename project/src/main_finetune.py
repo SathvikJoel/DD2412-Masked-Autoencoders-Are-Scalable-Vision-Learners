@@ -38,8 +38,6 @@ from util.misc import NativeScalerWithGradNormCount as NativeScaler
 import mea_model
 from engine_finetune import train_one_epoch, evaluate
 
-import timm.optim.optim_factory as optim_factory
-
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MAE fine-tuning for image classification', add_help=False)
@@ -60,9 +58,6 @@ def get_args_parser():
     # #Imagenet input size: 224x224
     # parser.add_argument('--input_size', default=224, type=int,
     #                     help='images input size')
-    parser.add_argument('--norm_pix_loss', action='store_true',
-                        help='Use (per-patch) normalized pixels as targets for computing loss')
-    parser.set_defaults(norm_pix_loss=False)
 
     parser.add_argument('--drop_path', type=float, default=0.1, metavar='PCT',
                         help='Drop path rate (default: 0.1)')
@@ -238,12 +233,11 @@ def main(args):
             prob=args.mixup_prob, switch_prob=args.mixup_switch_prob, mode=args.mixup_mode,
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
     
-    # model = mea_model.__dict__[args.model](
-    #     num_classes=args.nb_classes,
-    #     drop_path_rate=args.drop_path,
-    #     global_pool=args.global_pool,
-    # )
-    model = mea_model.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
+    model = mea_model.__dict__[args.model](
+        num_classes=args.nb_classes,
+        drop_path_rate=args.drop_path,
+        global_pool=args.global_pool,
+    )
 
     if args.finetune and not args.eval:
         checkpoint = torch.load(args.finetune, map_location='cpu')
@@ -295,11 +289,10 @@ def main(args):
         model_without_ddp = model.module
 
     # build optimizer with layer-wise lr decay (lrd)
-    param_groups = optim_factory.add_weight_decay(model_without_ddp, args.weight_decay)
-    # param_groups = lrd.param_groups_lrd(model_without_ddp, args.weight_decay,
-        # no_weight_decay_list=model_without_ddp.no_weight_decay(),
-        # layer_decay=args.layer_decay
-    # )
+    param_groups = lrd.param_groups_lrd(model_without_ddp, args.weight_decay,
+        no_weight_decay_list=model_without_ddp.no_weight_decay(),
+        layer_decay=args.layer_decay
+    )
     optimizer = torch.optim.AdamW(param_groups, lr=args.lr)
     loss_scaler = NativeScaler()
 

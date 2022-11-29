@@ -101,7 +101,7 @@ def get_args_parser():
 
     #We do not need to use distributed training for our project
     # distributed training parameters
-    parser.add_argument('--world_size', default=0, type=int,
+    parser.add_argument('--world_size', default=1, type=int,
                         help='number of distributed processes')
     parser.add_argument('--local_rank', default=-1, type=int)
     parser.add_argument('--dist_on_itp', action='store_true')
@@ -129,7 +129,7 @@ def main(args):
     # simple augmentation
     transform_train = transforms.Compose([
             #randomresizedcrop for cifar-100:
-            
+
             transforms.RandomResizedCrop(args.input_size, scale=(0.2, 1.0), interpolation=3),  # 3 is bicubic
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
@@ -141,21 +141,21 @@ def main(args):
     dataset_train = datasets.CIFAR100(root=args.data_path, train=True, download=True, transform=transform_train)
     print(dataset_train)
 
-    # if True:  # args.distributed:
-    #     num_tasks = misc.get_world_size()
-    #     global_rank = misc.get_rank()
-    #     sampler_train = torch.utils.data.DistributedSampler(
-    #         dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
-    #     )
-    #     print("Sampler_train = %s" % str(sampler_train))
-    # else:
-    sampler_train = torch.utils.data.RandomSampler(dataset_train)
+    if True:  # args.distributed:
+        num_tasks = misc.get_world_size()
+        global_rank = misc.get_rank()
+        sampler_train = torch.utils.data.DistributedSampler(
+            dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
+        )
+        print("Sampler_train = %s" % str(sampler_train))
+    else:
+        sampler_train = torch.utils.data.RandomSampler(dataset_train)
 
-    # if global_rank == 0 and args.log_dir is not None:
-    #     os.makedirs(args.log_dir, exist_ok=True)
-    #     log_writer = SummaryWriter(log_dir=args.log_dir)
-    # else:
-    log_writer = None
+    if global_rank == 0 and args.log_dir is not None:
+        os.makedirs(args.log_dir, exist_ok=True)
+        log_writer = SummaryWriter(log_dir=args.log_dir)
+    else:
+        log_writer = None
 
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train, sampler=sampler_train,
@@ -185,6 +185,7 @@ def main(args):
     print("effective batch size: %d" % eff_batch_size)
 
     if args.distributed:
+        print("args.distributed")
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
         model_without_ddp = model.module
     

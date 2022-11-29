@@ -234,9 +234,9 @@ def main(args):
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
     
     model = mea_model.__dict__[args.model](
-        num_classes=args.nb_classes,
-        drop_path_rate=args.drop_path,
-        global_pool=args.global_pool,
+        # num_classes=args.nb_classes,
+        # drop_path_rate=args.drop_path,
+        # global_pool=args.global_pool,
     )
 
     if args.finetune and not args.eval:

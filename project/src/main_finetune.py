@@ -114,7 +114,7 @@ def get_args_parser():
                         help='How to apply mixup/cutmix params. Per "batch", "pair", or "elem"')
 
     # * Finetuning params
-    parser.add_argument('--finetune', default='',
+    parser.add_argument('--finetune', default='./output_dir/checkpoint-399.pth',
                         help='finetune from checkpoint')
     parser.add_argument('--global_pool', action='store_true')
     parser.set_defaults(global_pool=True)
@@ -138,7 +138,7 @@ def get_args_parser():
     parser.add_argument('--device', default='cuda',
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=0, type=int)
-    parser.add_argument('--resume', default='./output_dir/checkpoint-399.pth',
+    parser.add_argument('--resume', default='',
                         help='resume from checkpoint')
 
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',

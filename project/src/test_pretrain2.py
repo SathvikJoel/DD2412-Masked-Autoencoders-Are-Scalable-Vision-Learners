@@ -33,7 +33,7 @@ def prepare_model(chkpt_dir, arch='mae_vit_base_patch16'):
     print(msg)
     return model
 
-def run_one_image(img, model, rn):
+def run_one_image(img, model, rn, chkpt_num):
     x = torch.tensor(img)
 
     # make it a batch-like
@@ -64,21 +64,22 @@ def run_one_image(img, model, rn):
 
     # plt.subplot(1, 4, 1)
     show_image(x[0], "original")
-    os.makedirs(f'../data/{rn}')
-    plt.savefig(f'../data/{rn}/original.png')
+    os.makedirs(f'../data/{chkpt_num}/{rn}', exist_ok=True)
+    
+    plt.savefig(f'../data/{chkpt_num}/{rn}/original.png')
     plt.show()
 
     # plt.subplot(1, 4, 2)
     show_image(im_masked[0], "masked")
-    plt.savefig(f'../data/{rn}/masked.png')
+    plt.savefig(f'../data/{chkpt_num}/{rn}/masked.png')
     plt.show()
     # plt.subplot(1, 4, 3)
     show_image(y[0], "reconstruction")
-    plt.savefig(f'../data/{rn}/reconstruction.png')
+    plt.savefig(f'../data/{chkpt_num}/{rn}/reconstruction.png')
     plt.show()
     # plt.subplot(1, 4, 4)
     show_image(im_paste[0], "reconstruction + visible")
-    plt.savefig(f'../data/{rn}/reconstruction_visible.png')
+    plt.savefig(f'../data/{chkpt_num}/{rn}/reconstruction_visible.png')
     plt.show()
 
 if __name__ == '__main__':
@@ -92,6 +93,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    chkpt_num = args.chkpt_dir.split('/')[-1].split('.')[0].split('-')[-1]
         
     model = prepare_model(args.chkpt_dir)
 
@@ -108,12 +110,11 @@ if __name__ == '__main__':
 
         plt.rcParams['figure.figsize'] = [5, 5]
         show_image(torch.tensor(img))
-        plt.savefig('../data/image.png')
-
-        # generate a random number 
+        plt.show()
+        # generate a random number  
         r = random.randint(0, 1000)
        
 
-        run_one_image(img, model, r)
+        run_one_image(img, model, r, chkpt_num)
 
 

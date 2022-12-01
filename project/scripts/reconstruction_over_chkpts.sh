@@ -1,0 +1,4 @@
+python3 ../src/test_pretrain2.py --chkpt_dir /home/frobergjoel/DD2412-Masked-Autoencoders-Are-Scalable-Vision-Learners/project/src/output_dir/checkpoint-0.pth
+python3 ../src/test_pretrain2.py --chkpt_dir /home/frobergjoel/DD2412-Masked-Autoencoders-Are-Scalable-Vision-Learners/project/src/output_dir/checkpoint-140.pth
+python3 ../src/test_pretrain2.py --chkpt_dir /home/frobergjoel/DD2412-Masked-Autoencoders-Are-Scalable-Vision-Learners/project/src/output_dir/checkpoint-280.pth
+python3 ../src/test_pretrain2.py --chkpt_dir /home/frobergjoel/DD2412-Masked-Autoencoders-Are-Scalable-Vision-Learners/project/src/output_dir/checkpoint-399.pth

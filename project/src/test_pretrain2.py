@@ -41,7 +41,7 @@ def run_one_image(img, model, rn, chkpt_num):
     x = torch.einsum('nhwc->nchw', x)
 
     # run MAE
-    loss, y, mask = model(x.float(), mask_ratio=0.75)
+    loss, y, mask = model(x.float(), mask_ratio=0.50)
     y = model.unpatchify(y)
     y = torch.einsum('nchw->nhwc', y).detach().cpu()
 
